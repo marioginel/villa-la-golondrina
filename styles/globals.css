@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { background-color: #f0f9ff; }
+/* Esto hace que el scroll lateral sea suave */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
