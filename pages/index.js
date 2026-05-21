@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, onSnapshot, collection, writeBatch } from 'firebase/firestore';
 import { LucideLock, LucideUtensils, LucidePalmtree, LucideBedDouble, LucideX, LucideSave, LucideCalendarDays } from 'lucide-react';
 
-// --- CONFIGURACIÓN DE FIREBASE ---
+// --- PEGA AQUÍ TUS CLAVES DE FIREBASE ---
 const firebaseConfig = {
     apiKey: "TU_API_KEY",
     authDomain: "TU_DOMINIO.firebaseapp.com",
@@ -17,17 +17,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const ROOMS = [
-  { id: 'inf1', name: "Hab. Piso Inferior 1", color: 'bg-blue-500' },
-  { id: 'inf2', name: "Hab. Piso Inferior 2", color: 'bg-blue-400' },
-  { id: 'sup',  name: "Hab. Piso Superior",   color: 'bg-indigo-500' },
-  { id: 'ext1', name: "Hab. Exterior 1",     color: 'bg-teal-500' },
-  { id: 'ext2', name: "Hab. Exterior 2",     color: 'bg-emerald-500' }
+  { id: 'inf1', name: "Hab. Piso Inferior 1", color: 'bg-blue-600' },
+  { id: 'inf2', name: "Hab. Piso Inferior 2", color: 'bg-cyan-500' },
+  { id: 'sup',  name: "Hab. Piso Superior",   color: 'bg-indigo-600' },
+  { id: 'ext1', name: "Hab. Exterior 1",     color: 'bg-emerald-500' },
+  { id: 'ext2', name: "Hab. Exterior 2",     color: 'bg-teal-600' }
 ];
 
 const PLANS = [
-  { id: 'comida', name: "Comida", icon: <LucideUtensils size={18}/>, color: 'text-orange-600', bg: 'bg-orange-100' },
-  { id: 'plan',   name: "Actividad", icon: <LucidePalmtree size={18}/>, color: 'text-sky-600', bg: 'bg-sky-100' },
-  { id: 'cena',   name: "Cena", icon: <LucideUtensils size={18}/>, color: 'text-purple-600', bg: 'bg-purple-100' }
+  { id: 'comida', name: "Comida", icon: <LucideUtensils size={18}/>, color: 'text-orange-600', bg: 'bg-orange-100', bdr: 'border-orange-200' },
+  { id: 'plan',   name: "Actividad", icon: <LucidePalmtree size={18}/>, color: 'text-sky-600', bg: 'bg-sky-100', bdr: 'border-sky-200' },
+  { id: 'cena',   name: "Cena", icon: <LucideUtensils size={18}/>, color: 'text-purple-600', bg: 'bg-purple-100', bdr: 'border-purple-200' }
 ];
 
 const DAYS = Array.from({ length: 22 }, (_, i) => i + 8);
@@ -70,75 +70,76 @@ export default function VillaApp() {
 
   if (!isAuth) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-sky-600 p-6 text-white">
-        <div className="bg-white p-10 rounded-[3rem] shadow-2xl w-full max-w-md border-b-8 border-sky-800">
-          <h1 className="text-4xl font-black text-sky-900 text-center mb-8 tracking-tighter">VILLA<br/>GOLONDRINA</h1>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-900 p-6 text-white font-sans">
+        <div className="bg-white p-12 rounded-[3.5rem] shadow-2xl w-full max-w-md text-center border-b-[12px] border-blue-700">
+          <h1 className="text-4xl font-black text-blue-900 mb-2 tracking-tighter">LA GOLONDRINA</h1>
+          <p className="text-blue-400 font-bold mb-8 uppercase text-xs tracking-widest">Verano 2026</p>
           <input 
             type="password" 
-            className="w-full p-5 bg-sky-50 border-2 border-sky-100 rounded-3xl mb-4 text-center focus:ring-4 ring-sky-200 transition-all outline-none text-2xl text-sky-900 font-bold"
-            placeholder="Clave Javea"
+            className="w-full p-6 bg-slate-100 border-none rounded-3xl mb-6 text-center focus:ring-4 ring-blue-200 transition-all outline-none text-2xl text-blue-900 font-bold"
+            placeholder="Clave"
             onChange={(e) => setPass(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && pass === "Javea2026" && setIsAuth(true)}
           />
-          <button onClick={() => pass === "Javea2026" ? setIsAuth(true) : alert("Clave incorrecta")} className="w-full bg-orange-500 hover:bg-orange-600 text-white p-5 rounded-3xl font-black text-xl shadow-xl transition-all active:scale-95">ENTRAR</button>
+          <button onClick={() => pass === "Javea2026" ? setIsAuth(true) : alert("Clave incorrecta")} className="w-full bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-3xl font-black text-xl shadow-xl shadow-blue-200 transition-all active:scale-95">ENTRAR</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-sky-50 font-sans pb-20">
-      {/* SECCIÓN FOTO HERO */}
-      <div className="relative h-80 w-full overflow-hidden shadow-2xl">
+    <div className="min-h-screen bg-[#f8fafc] font-sans pb-20">
+      {/* CABECERA CON TU FOTO */}
+      <div className="relative h-[450px] w-full overflow-hidden shadow-2xl">
         <img 
-          src="https://alojamientos.marhenhomes.com/fotos/alojamientos/1/1709115795499298f244199c086f691656e9f2a0df.jpg" 
+          src="/casa.jpg" 
           className="w-full h-full object-cover"
           alt="Villa La Golondrina"
+          onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=2000"}}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-sky-900/90 via-sky-900/20 to-transparent"></div>
-        <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end">
-          <div className="text-white">
-            <span className="bg-orange-500 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-2 inline-block">Premium Villa</span>
-            <h1 className="text-5xl font-black tracking-tighter uppercase italic">La Golondrina</h1>
-            <p className="font-bold opacity-80 flex items-center gap-2"><LucidePalmtree size={18}/> JÁVEA · AGOSTO 2026</p>
-          </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
+        <div className="absolute bottom-12 left-10 text-white">
+            <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-none mb-2">La Golondrina</h1>
+            <p className="font-bold text-blue-300 flex items-center gap-2 text-xl tracking-widest italic">
+              <LucidePalmtree size={24}/> JÁVEA · AGOSTO 2026
+            </p>
         </div>
       </div>
 
-      <main className="max-w-[1500px] mx-auto p-4 sm:p-8 -mt-12 relative z-10">
-        <div className="bg-white shadow-[0_30px_60px_-15px_rgba(0,0,0,0.2)] rounded-[4rem] overflow-hidden border-8 border-white">
+      <main className="max-w-[1600px] mx-auto p-4 sm:p-10 -mt-20 relative z-10">
+        <div className="bg-white shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] rounded-[4rem] overflow-hidden border-[12px] border-white">
           
-          <div className="overflow-x-auto scrollbar-hide">
-            <table className="w-full border-collapse table-fixed min-w-[1600px]">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse table-fixed min-w-[1800px]">
               <thead>
-                <tr className="bg-sky-900 text-white">
-                  <th className="sticky left-0 z-30 bg-sky-950 p-8 w-64 text-left border-r border-sky-800">
-                    <span className="text-xs font-black uppercase tracking-widest text-sky-400">Distribución</span>
+                <tr className="bg-slate-900 text-white">
+                  <th className="sticky left-0 z-30 bg-slate-900 p-10 w-72 text-left border-r border-slate-800">
+                    <span className="text-xs font-black uppercase tracking-[0.3em] text-blue-400">Distribución</span>
                   </th>
                   {DAYS.map(day => (
-                    <th key={day} className="p-6 border-r border-sky-800/50">
+                    <th key={day} className="p-8 border-r border-slate-800/50">
                       <div className="flex flex-col items-center">
-                        <span className="text-[10px] font-black text-sky-400 mb-1">{getDayName(day)}</span>
-                        <span className="text-3xl font-black tracking-tighter leading-none">{day}</span>
+                        <span className="text-xs font-black text-blue-400 mb-1">{getDayName(day)}</span>
+                        <span className="text-4xl font-black tracking-tighter leading-none">{day}</span>
                       </div>
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody>
-                {/* FILAS DE HABITACIONES */}
-                {ROOMS.map((room, idx) => (
-                  <tr key={room.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                    <td className="sticky left-0 z-20 bg-inherit border-r border-slate-100 p-6 font-black text-slate-800 flex items-center gap-4 shadow-xl">
-                      <div className={`${room.color} text-white p-3 rounded-2xl shadow-lg`}><LucideBedDouble size={20}/></div>
-                      <span className="text-sm leading-tight">{room.name}</span>
+              <tbody className="divide-y divide-slate-100">
+                {/* HABITACIONES */}
+                {ROOMS.map((room) => (
+                  <tr key={room.id} className="hover:bg-blue-50/30 transition-colors">
+                    <td className="sticky left-0 z-20 bg-white border-r border-slate-100 p-8 font-black text-slate-800 flex items-center gap-5 shadow-2xl">
+                      <div className={`${room.color} text-white p-4 rounded-[1.5rem] shadow-lg`}><LucideBedDouble size={24}/></div>
+                      <span className="text-base leading-tight uppercase tracking-tighter">{room.name}</span>
                     </td>
                     {DAYS.map(day => {
                       const val = data[`${day}-${room.id}`]?.val || "";
                       return (
-                        <td key={day} onClick={() => openEditor(day, room.id, room.name, val)} className="p-3 border-r border-slate-100 border-b">
-                          <div className={`h-16 rounded-[1.5rem] flex items-center justify-center text-xs font-black transition-all cursor-pointer border-2
-                            ${val ? 'bg-sky-500 text-white border-sky-200 shadow-md scale-[1.02]' : 'bg-white border-dashed border-slate-200 text-slate-300 hover:border-sky-300 hover:bg-sky-50'}`}>
+                        <td key={day} onClick={() => openEditor(day, room.id, room.name, val)} className="p-4 border-r border-slate-50">
+                          <div className={`h-20 rounded-[2rem] flex items-center justify-center text-sm font-black transition-all cursor-pointer border-4
+                            ${val ? 'bg-blue-600 text-white border-blue-200 shadow-xl shadow-blue-100 scale-[1.05]' : 'bg-slate-50 border-dashed border-slate-200 text-slate-300 hover:border-blue-400 hover:bg-white'}`}>
                             {val ? val.toUpperCase() : '—'}
                           </div>
                         </td>
@@ -147,20 +148,20 @@ export default function VillaApp() {
                   </tr>
                 ))}
 
-                {/* FILAS DE PLANNING */}
-                <tr className="bg-orange-50"><td colSpan={DAYS.length + 1} className="p-4 text-center font-black text-orange-600 text-xs uppercase tracking-[0.5em]">Planning de Comidas y Planes</td></tr>
+                {/* PLANNING */}
+                <tr className="bg-slate-900"><td colSpan={DAYS.length + 1} className="p-5 text-center font-black text-blue-400 text-xs uppercase tracking-[0.8em]">Agenda Diaria</td></tr>
                 {PLANS.map(plan => (
                   <tr key={plan.id} className="bg-white">
-                    <td className="sticky left-0 z-20 bg-white border-r border-slate-100 p-6 font-black text-slate-800 flex items-center gap-4 shadow-xl">
-                      <div className={`${plan.bg} ${plan.color} p-3 rounded-2xl shadow-inner`}>{plan.icon}</div>
-                      <span className="text-sm">{plan.name}</span>
+                    <td className="sticky left-0 z-20 bg-white border-r border-slate-100 p-8 font-black text-slate-800 flex items-center gap-5 shadow-2xl">
+                      <div className={`${plan.bg} ${plan.color} p-4 rounded-[1.5rem] shadow-inner`}>{plan.icon}</div>
+                      <span className="text-base uppercase tracking-tighter">{plan.name}</span>
                     </td>
                     {DAYS.map(day => {
                       const val = data[`${day}-${plan.id}`]?.val || "";
                       return (
-                        <td key={day} onClick={() => openEditor(day, plan.id, plan.name, val)} className="p-3 border-r border-slate-100 border-b">
-                          <div className={`h-24 rounded-[1.5rem] p-4 text-[11px] font-bold leading-tight transition-all cursor-pointer border-2 overflow-hidden
-                            ${val ? `${plan.bg} ${plan.color} border-transparent` : 'bg-white border-dashed border-slate-100 text-slate-300 flex items-center justify-center hover:bg-slate-50'}`}>
+                        <td key={day} onClick={() => openEditor(day, plan.id, plan.name, val)} className="p-4 border-r border-slate-50">
+                          <div className={`h-28 rounded-[2rem] p-5 text-xs font-bold leading-snug transition-all cursor-pointer border-4 overflow-hidden
+                            ${val ? `${plan.bg} ${plan.color} ${plan.bdr} shadow-lg shadow-slate-100` : 'bg-white border-dashed border-slate-100 text-slate-200 flex items-center justify-center hover:bg-slate-50'}`}>
                             {val || '—'}
                           </div>
                         </td>
@@ -174,43 +175,43 @@ export default function VillaApp() {
         </div>
       </main>
 
-      {/* POP-UP CENTRAL (MODAL) */}
+      {/* POP-UP (MODAL) CENTRALIZADO */}
       {editing && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-sky-950/70 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="bg-white w-full max-w-lg rounded-[4rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden border-t-8 border-orange-500 transform transition-all scale-100">
-            <div className="p-10">
-              <div className="flex justify-between items-start mb-8">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-xl transition-all">
+          <div className="bg-white w-full max-w-xl rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden border-t-[16px] border-blue-600 animate-in zoom-in-95 duration-200">
+            <div className="p-12">
+              <div className="flex justify-between items-start mb-10">
                 <div>
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-1 leading-none">{editing.typeName}</h2>
-                  <p className="text-orange-500 font-black text-xs uppercase tracking-widest">Reserva / Información</p>
+                  <h2 className="text-5xl font-black text-slate-900 tracking-tighter mb-2 italic">{editing.typeName}</h2>
+                  <div className="flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest">
+                    <LucideCalendarDays size={14}/> Del {editing.day} al {endDay} de agosto
+                  </div>
                 </div>
-                <button onClick={() => setEditing(null)} className="p-4 bg-slate-100 rounded-full text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all"><LucideX size={24}/></button>
+                <button onClick={() => setEditing(null)} className="p-4 bg-slate-100 rounded-full text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all"><LucideX size={32}/></button>
               </div>
 
-              <div className="bg-sky-50 p-6 rounded-[2.5rem] mb-8">
-                <label className="text-[10px] font-black text-sky-900/40 uppercase mb-4 flex items-center gap-2 italic">
-                  <LucideCalendarDays size={14}/> ¿Cuántos días se queda? (Del {editing.day} al {endDay})
-                </label>
-                <div className="flex items-center gap-6">
+              <div className="bg-slate-50 p-8 rounded-[3rem] mb-10 border-2 border-slate-100">
+                <p className="text-[10px] font-black text-slate-400 uppercase mb-6 tracking-[0.2em]">Ajustar periodo de estancia</p>
+                <div className="flex items-center gap-8">
                   <input 
                     type="range" min={editing.day} max={29} value={endDay} 
                     onChange={(e) => setEndDay(parseInt(e.target.value))}
-                    className="flex-1 h-3 bg-sky-200 rounded-full appearance-none cursor-pointer accent-orange-500"
+                    className="flex-1 h-4 bg-blue-100 rounded-full appearance-none cursor-pointer accent-blue-600"
                   />
-                  <span className="text-3xl font-black text-sky-900 w-12 text-center">{endDay}</span>
+                  <div className="bg-blue-600 text-white text-4xl font-black w-20 h-20 rounded-3xl flex items-center justify-center shadow-xl shadow-blue-200 italic">{endDay}</div>
                 </div>
               </div>
 
               <textarea 
                 autoFocus
-                className="w-full p-8 bg-slate-50 border-3 border-transparent rounded-[2.5rem] mb-8 text-2xl font-bold outline-none focus:ring-8 ring-sky-100 h-40 resize-none text-slate-800 placeholder:text-slate-200 shadow-inner"
+                className="w-full p-10 bg-slate-50 border-none rounded-[3rem] mb-10 text-3xl font-bold outline-none focus:ring-[12px] ring-blue-50 transition-all h-56 resize-none text-slate-800 placeholder:text-slate-200"
                 value={tempVal}
                 onChange={(e) => setTempVal(e.target.value)}
                 placeholder="Nombre o Plan..."
               />
               
-              <button onClick={saveChange} className="w-full p-8 rounded-[2.5rem] font-black bg-sky-900 text-white flex items-center justify-center gap-4 text-2xl shadow-2xl shadow-sky-300 hover:bg-black active:scale-95 transition-all">
-                <LucideSave size={28}/> GUARDAR TODO
+              <button onClick={saveChange} className="w-full p-10 rounded-[3rem] font-black bg-blue-600 text-white flex items-center justify-center gap-5 text-3xl shadow-[0_20px_50px_rgba(37,99,235,0.4)] hover:bg-black transition-all active:scale-95">
+                <LucideSave size={36}/> GUARDAR
               </button>
             </div>
           </div>
