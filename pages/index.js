@@ -252,4 +252,16 @@ export default function VillaApp() {
                 className="w-full p-10 bg-slate-50 border-none rounded-[3rem] mb-10 text-3xl font-bold outline-none focus:ring-[16px] ring-blue-50 transition-all h-64 resize-none text-slate-800 placeholder:text-slate-200 shadow-inner"
                 value={tempVal}
                 onChange={(e) => setTempVal(e.target.value)}
-                placeholder={editing.isRoom ? "Nombre de la persona..." : "Escribe el menú o el pl
+                placeholder={editing.isRoom ? "Nombre de la persona..." : "Escribe el menú o el plan..."}
+              />
+              
+              <button onClick={saveChange} className="w-full p-10 rounded-[3rem] font-black bg-slate-900 text-white flex items-center justify-center gap-6 text-3xl shadow-2xl hover:bg-blue-600 transition-all active:scale-95 uppercase italic">
+                <LucideSave size={40}/> Guardar cambios
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
