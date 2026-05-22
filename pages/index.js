@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, onSnapshot, collection, writeBatch } from 'firebase/firestore';
 import { LucideUtensils, LucidePalmtree, LucideX, LucideSave, LucideMapPin, LucideBedDouble, LucideCalendarDays } from 'lucide-react';
 
-const firebaseConfig = 
+const firebaseConfig = {
   apiKey: "AIzaSyCkTjX-3LV4d2Ud7sQ_mlam2mSApMAbQPM",
   authDomain: "villa-javea-e5590.firebaseapp.com",
   projectId: "villa-javea-e5590",
