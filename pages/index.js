@@ -1,30 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, onSnapshot, collection, writeBatch } from 'firebase/firestore';
-import { LucideUtensils, LucidePalmtree, LucideX, LucideSave } from 'lucide-react';
+import { LucideUtensils, LucidePalmtree, LucideX, LucideSave, LucideMapPin, LucideBedDouble, LucideCalendarDays } from 'lucide-react';
 
-// --- CONFIGURACIÓN FIREBASE ---
-const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_DOMINIO.firebaseapp.com",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_STORAGE_BUCKET",
-    messagingSenderId: "TU_SENDER_ID",
-    appId: "TU_APP_ID"
-};
+const firebaseConfig = { /* TU CONFIGURACIÓN AQUÍ */ };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const ROOMS =[
-  { id: 'inf1', name: "Hab.1" }, { id: 'inf2', name: "Hab.2" }, 
-  { id: 'sup',  name: "Hab.3" }, { id: 'ext1', name: "Hab.4" }, 
-  { id: 'ext2', name: "Hab.5" }
+  { id: 'inf1', name: "Hab.1", color: 'bg-blue-600' },
+  { id: 'inf2', name: "Hab.2", color: 'bg-cyan-500' },
+  { id: 'sup',  name: "Hab.3", color: 'bg-indigo-600' },
+  { id: 'ext1', name: "Hab.4", color: 'bg-emerald-500' },
+  { id: 'ext2', name: "Hab.5", color: 'bg-teal-600' }
 ];
 
 const PLANS =[
-  { id: 'comida', name: "Comida", icon: <LucideUtensils size={14}/> },
-  { id: 'plan',   name: "Plan", icon: <LucidePalmtree size={14}/> },
-  { id: 'cena',   name: "Cena", icon: <LucideUtensils size={14}/> }
+  { id: 'comida', name: "Comida", icon: <LucideUtensils size={18}/>, bg: 'bg-orange-100', text: 'text-orange-700' },
+  { id: 'plan',   name: "Plan", icon: <LucidePalmtree size={18}/>, bg: 'bg-sky-100', text: 'text-sky-700' },
+  { id: 'cena',   name: "Cena", icon: <LucideUtensils size={18}/>, bg: 'bg-purple-100', text: 'text-purple-700' }
 ];
 
 const DAYS = Array.from({ length: 22 }, (_, i) => i + 8);
@@ -61,62 +55,84 @@ export default function VillaApp() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-800 pb-10">
-      <div className="p-4 bg-slate-900 text-white font-black text-lg italic tracking-tighter">GOLONDRINA 2026</div>
-
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border-spacing-0">
-          <tbody>
-            {ROOMS.map(r => (
-              <tr key={r.id} className="border-b border-slate-100">
-                <td className="sticky left-0 z-10 bg-white p-2 text-[10px] font-black uppercase border-r border-slate-200 w-16">{r.name}</td>
-                {DAYS.map(d => {
-                  const val = data[`${d}-${r.id}`]?.val;
-                  return (
-                    <td key={d} onClick={() => openEditor(d, r.id, r.name, val, true)} className="border-r border-slate-50 w-10 h-10">
-                      <div className={`w-full h-full ${val ? 'bg-blue-600' : 'bg-slate-50'}`}></div>
-                    </td>
-                  )
-                })}
-              </tr>
-            ))}
-            
-            <tr><td colSpan={DAYS.length + 1} className="h-6 bg-slate-50"></td></tr>
-
-            {PLANS.map(p => (
-              <tr key={p.id} className="border-b border-slate-100 h-20">
-                <td className="sticky left-0 z-10 bg-white p-2 text-[10px] font-black uppercase border-r border-slate-200 flex flex-col items-center justify-center h-20">
-                   {p.icon} {p.name}
-                </td>
-                {DAYS.map(d => {
-                  const val = data[`${d}-${p.id}`]?.val;
-                  return (
-                    <td key={d} onClick={() => openEditor(d, p.id, p.name, val, false)} className="border-r border-slate-50 min-w-[50px] p-1">
-                      <div className="flex items-center justify-center h-full w-full bg-slate-50 rounded text-[9px] font-bold text-center p-1 leading-none">
-                        {val ? val.substring(0, 10) : d}
-                      </div>
-                    </td>
-                  )
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="min-h-screen bg-slate-50 pb-20 font-sans">
+      {/* HEADER PREMIUM */}
+      <div className="relative h-60 w-full overflow-hidden shadow-2xl">
+        <img src="/casa.jpg" className="w-full h-full object-cover" alt="Villa" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent flex items-end p-6">
+          <h1 className="text-3xl font-black text-white italic tracking-tighter">La Golondrina</h1>
+        </div>
       </div>
 
-      {editing && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-white w-full p-6 rounded-3xl">
-            <div className="flex justify-between mb-4">
-                <h2 className="font-black text-lg uppercase">{editing.typeName}</h2>
-                <button onClick={() => setEditing(null)}><LucideX/></button>
+      {/* TABLA DE RESERVAS */}
+      <div className="p-4 -mt-6">
+        <div className="bg-white rounded-[2rem] shadow-xl p-4 overflow-x-auto">
+          <table className="w-full border-separate border-spacing-y-2">
+            <tbody>
+              {ROOMS.map(r => (
+                <tr key={r.id}>
+                  <td className="w-16 text-[10px] font-black uppercase text-slate-400">{r.name}</td>
+                  {DAYS.map(d => {
+                    const val = data[`${d}-${r.id}`]?.val;
+                    const isStart = val && val !== data[`${d-1}-${r.id}`]?.val;
+                    const isEnd = val && val !== data[`${d+1}-${r.id}`]?.val;
+                    return (
+                      <td key={d} onClick={() => openEditor(d, r.id, r.name, val, true)} className="p-0.5">
+                        <div className={`h-12 flex items-center justify-center text-[10px] font-bold text-white transition-all
+                          ${val ? `${r.color} ${isStart ? 'rounded-l-2xl' : ''} ${isEnd ? 'rounded-r-2xl' : ''}` : 'bg-slate-100 rounded-lg'}`}>
+                          {isStart ? val.substring(0,6) : ''}
+                        </div>
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* AGENDA DIARIA */}
+        <h2 className="font-black mt-8 mb-4 text-slate-800 uppercase tracking-widest text-sm">Agenda diaria</h2>
+        <div className="space-y-4">
+          {PLANS.map(p => (
+            <div key={p.id} className="bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
+              <div className="flex items-center gap-2 mb-3 text-sm font-bold">{p.icon} {p.name}</div>
+              <div className="grid grid-cols-7 gap-1">
+                {DAYS.map(d => {
+                    const val = data[`${d}-${p.id}`]?.val;
+                    return (
+                        <div key={d} onClick={() => openEditor(d, p.id, p.name, val, false)} 
+                             className={`h-12 rounded-xl flex items-center justify-center text-[9px] font-bold text-center ${val ? `${p.bg} ${p.text}` : 'bg-slate-100'}`}>
+                             {val ? '✅' : d}
+                        </div>
+                    )
+                })}
+              </div>
             </div>
-            {editing.isRoom && (
-                <input type="range" min={editing.day} max={29} value={endDay} onChange={(e) => setEndDay(parseInt(e.target.value))} className="w-full mb-4"/>
-            )}
-            <textarea autoFocus className="w-full h-32 p-4 bg-slate-100 rounded-xl mb-4" value={tempVal} onChange={(e) => setTempVal(e.target.value)}/>
-            <button onClick={saveChange} className="w-full bg-blue-600 text-white p-4 rounded-xl font-black">GUARDAR</button>
-          </div>
+          ))}
+        </div>
+
+        {/* MAPA Y DIRECCIÓN */}
+        <div className="mt-8 bg-white p-6 rounded-3xl shadow-sm">
+            <div className="w-full h-48 rounded-2xl overflow-hidden mb-4">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.824707172837!2d0.10193687661559132!3d38.77409097175143!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x129e05006b578ce3%3A0x540f2b3023582c80!2sLa%20Golondrina!5e0!3m2!1ses!2ses!4v1715870000000!5m2!1ses!2ses" className="w-full h-full border-0"></iframe>
+            </div>
+            <div className="flex items-center gap-3">
+                <LucideMapPin className="text-blue-600"/>
+                <p className="text-xs font-bold text-slate-500 italic">C. de la Golondrina, 42, 03730 Xàbia, Alicante</p>
+            </div>
+        </div>
+      </div>
+
+      {/* MODAL MODERNO */}
+      {editing && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
+            <div className="bg-white w-full max-w-sm p-6 rounded-[2rem] shadow-2xl">
+                <h2 className="font-black text-xl mb-4 italic uppercase">{editing.typeName}</h2>
+                {editing.isRoom && <input type="range" min={editing.day} max={29} value={endDay} onChange={(e) => setEndDay(parseInt(e.target.value))} className="w-full mb-6 accent-blue-600"/>}
+                <textarea autoFocus className="w-full h-32 p-4 bg-slate-100 rounded-2xl mb-4" value={tempVal} onChange={(e) => setTempVal(e.target.value)}/>
+                <button onClick={saveChange} className="w-full bg-slate-900 text-white p-4 rounded-2xl font-black">GUARDAR</button>
+            </div>
         </div>
       )}
     </div>
