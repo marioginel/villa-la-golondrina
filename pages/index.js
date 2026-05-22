@@ -3,7 +3,15 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc, onSnapshot, collection, writeBatch } from 'firebase/firestore';
 import { LucideUtensils, LucidePalmtree, LucideX, LucideSave, LucideMapPin, LucideBedDouble, LucideCalendarDays } from 'lucide-react';
 
-const firebaseConfig = { /* TU CONFIGURACIÓN AQUÍ */ };
+const firebaseConfig = 
+  apiKey: "AIzaSyCkTjX-3LV4d2Ud7sQ_mlam2mSApMAbQPM",
+  authDomain: "villa-javea-e5590.firebaseapp.com",
+  projectId: "villa-javea-e5590",
+  storageBucket: "villa-javea-e5590.firebasestorage.app",
+  messagingSenderId: "1018497732551",
+  appId: "1:1018497732551:web:2a70543dfdfa1373b9d3e2",
+  measurementId: "G-G2ZQG9FP5M"
+};
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
